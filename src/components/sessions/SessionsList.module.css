@@ -1,0 +1,16 @@
+.frame {
+    width: 100%;
+  }
+   
+.title {
+    font: 400 40px/1.5 Helvetica, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+   
+.list{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }

@@ -1,0 +1,77 @@
+.item {
+    margin: 1rem 0;
+    width: 100%;
+  }
+  
+  .content {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .image {
+    width: 100%;
+    height: 20rem;
+    overflow: hidden;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+  }
+  
+  .image img {
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .content h3 {
+    font-size: 1.25rem;
+    color: #2c292b;
+  }
+  
+  .actions {
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .actions button {
+    font: inherit;
+    cursor: pointer;
+    color: #2a86ff;
+    border: 1px solid #2a86ff;
+    background-color: transparent;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+  }
+
+  .checkIn button{
+    font: inherit;
+    cursor: pointer;
+    color: #2a86ff;
+    border: 1px solid #2a86ff;
+    background-color: transparent;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+  }
+
+  .checkOut button{
+    font: inherit;
+    cursor: pointer;
+    color: #ff2a2a;
+    border: 1px solid #ff2a2a;
+    background-color: transparent;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+  }
+  
+  .actions button:hover,
+  .actions button:active {
+    background-color: #d4e7ff;
+  }
+
+  .checkIn button:hover,
+  .checkIn button:active {
+    background-color: #d4e7ff;
+  }
+
+  .checkOut button:hover,
+  .checkOut button:active {
+    background-color: #fff2f2;
+  }

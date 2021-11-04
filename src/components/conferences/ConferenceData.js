@@ -11,6 +11,8 @@ const USER_GRADES_URL = "http://localhost:9000/usergrades"
 const ConferenceData = (props) => {
   const conferenceCtx = useContext(ConferenceContext);
   const [isRating, setIsRating] = useState(false);
+  const [messageShow, setMessageShow] = useState(false);
+  const [gradeChange, setGradeChange] = useState(false);
 
   const map = new Map();
   const oldGrades = new Map();
@@ -35,7 +37,7 @@ const ConferenceData = (props) => {
       let grade = document.getElementById(selectItemId).options[document.getElementById(selectItemId).selectedIndex].text;
       map.set(selectItemId, grade);
     }
-    console.log(map);
+    setGradeChange(true);
   }
 
   function onRate(event) {
@@ -47,7 +49,7 @@ const ConferenceData = (props) => {
 
   function saveRatings(event) {
     event.preventDefault();
-    for(let i = 0; i < props.conference.gradingSubjects.length; i++){
+    /*for(let i = 0; i < props.conference.gradingSubjects.length; i++){
       let grade = map.get(props.conference.gradingSubjects[i].gradingSubjectId);
 
       fetch(
@@ -68,6 +70,16 @@ const ConferenceData = (props) => {
         console.log(data);
       })
     }
+    setIsRating(false);*/
+    if(!gradeChange){
+      for(let i = 0; i < props.conference.gradingSubjects.length; i++){
+        let selectItemId = props.conference.gradingSubjects[i].gradingSubjectId;
+        map.set(selectItemId, 1);
+      }
+    }
+    console.log("MAPA PRIJE RATE", map);
+    props.onSave(map);
+    setMessageShow(true);
   }
 
   return (
@@ -131,6 +143,7 @@ const ConferenceData = (props) => {
         ) : (
           ""
         )}
+        {messageShow?<h3>Rating done successfully</h3>:""}
       </div>
     </Card>
   );

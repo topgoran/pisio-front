@@ -75,7 +75,7 @@ const NewSessionForm = (props) => {
   }
   return (
     <Card>
-      <h2 className={classes.title}>Add new session</h2>
+      <h2 className={classes.title}>{!props.isEdit?"Add new session":"Edit session"}</h2>
       <form className={classes.form} onSubmit={addNewSession}>
         <div className={classes.control}>
           <label htmlFor="name">Session name</label>

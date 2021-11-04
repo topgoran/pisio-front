@@ -49,8 +49,10 @@ const NewEventForm = (props) => {
   const [newResources, setNewResources] = useState([]);
 
   const [collisionCheck, setCollisionCheck] = useState(false);
+  
 
   useEffect(() => {
+
     setIsLoading(true);
     fetch(MODERATORS_URL)
       .then((response) => {
@@ -156,18 +158,22 @@ const NewEventForm = (props) => {
   function addNewEvent(event) {
     event.preventDefault();
 
+    var tzoffset = (new Date()).getTimezoneOffset() * 60000;
+    var startTime1 = (new Date(startTime - tzoffset)).toISOString().slice(0, -1);
+    var endTime1 = (new Date(endTime - tzoffset)).toISOString().slice(0, -1);
+
     fetch(EVENTS_COLLISION_URL, {
       method: "POST",
       body: JSON.stringify({
         venueId: venue,
         timeFrom:
-          startTime.toISOString().split("T")[0] +
+          props.session.date.split(" ")[0] +
           " " +
-          startTime.toISOString().split("T")[1].replace("Z", "").slice(0, -4),
+          startTime1.split("T")[1].replace("Z", "").slice(0, -4),
         timeTo:
-          endTime.toISOString().split("T")[0] +
+          props.session.date.split(" ")[0] +
           " " +
-          endTime.toISOString().split("T")[1].replace("Z", "").slice(0, -4),
+          endTime1.split("T")[1].replace("Z", "").slice(0, -4),
       }),
       headers: {
         "Content-Type": "application/json",
@@ -186,31 +192,31 @@ const NewEventForm = (props) => {
 
     if (!collisionCheck) {
       const newEvent = {
-      name: eventName,
-      description: eventDescription,
-      timeFrom:
-        props.session.date.split(" ")[0] +
-        " " +
-        startTime.toISOString().split("T")[1].split(".")[0],
-      timeTo:
-        props.session.date.split(" ")[0] +
-        " " +
-        endTime.toISOString().split("T")[1].split(".")[0],
-      isOnline: isOnline,
-      sessionId: id2,
-      eventTypeId: eventType,
-      venueId: venue,
-      userLecturerId: lecturer,
-      userModeratorId: moderator,
-      accessLink: accessLink,
-      accessPassword: accessPassword,
-    };
+        name: eventName,
+        description: eventDescription,
+        timeFrom:
+          props.session.date.split(" ")[0] +
+          " " +
+          startTime1.split("T")[1].split(".")[0],
+        timeTo:
+          props.session.date.split(" ")[0] +
+          " " +
+          endTime1.split("T")[1].split(".")[0],
+        isOnline: isOnline,
+        sessionId: id2,
+        eventTypeId: eventType,
+        venueId: venue,
+        userLecturerId: lecturer,
+        userModeratorId: moderator,
+        accessLink: accessLink,
+        accessPassword: accessPassword,
+      };
 
-    if (props.isEdit) {
-      newEvent.sessionId = props.session.sessionId;
-    }
+      if (props.isEdit) {
+        newEvent.sessionId = props.session.sessionId;
+      }
 
-    /*if (isOnline) {
+      /*if (isOnline) {
       newEvent.venueId = null;
       newEvent.accessLink = accessLink;
       newEvent.accessPassword = accessPassword;
@@ -220,33 +226,32 @@ const NewEventForm = (props) => {
       newEvent.accessLink = null;
     }*/
 
-    console.log("NEW EVENT", newEvent);
+      console.log("NEW EVENT", newEvent);
 
-    if (props.isEdit) {
-      fetch(EVENTS_URL + "/" + props.editId, {
-        method: "PUT",
-        body: JSON.stringify(newEvent),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) throw new Error(response.status);
-          else return response.json();
+      if (props.isEdit) {
+        fetch(EVENTS_URL + "/" + props.editId, {
+          method: "PUT",
+          body: JSON.stringify(newEvent),
+          headers: {
+            "Content-Type": "application/json",
+          },
         })
-        .then((data) => {
-          console.log(data);
+          .then((response) => {
+            if (!response.ok) throw new Error(response.status);
+            else return response.json();
+          })
+          .then((data) => {
+            console.log(data);
 
-          history.replace("/responsibilities");
-        })
-        .catch((error) => {});
+            history.replace("/responsibilities");
+          })
+          .catch((error) => {});
+      } else {
+        props.onAdd(newEvent, newResources);
+      }
+
+      setNewResources([]);
     } else {
-      props.onAdd(newEvent, newResources);
-    }
-
-    setNewResources([]);
-
-    }else{
       alert("Collision with other termin");
     }
   }
@@ -413,9 +418,7 @@ const NewEventForm = (props) => {
         </div>
         {isOnline === "false" ? (
           <div className={classes.control}>
-            <label htmlFor="venue">
-              Venue
-            </label>
+            <label htmlFor="venue">Venue</label>
             <select
               type="text"
               required
@@ -527,7 +530,7 @@ const NewEventForm = (props) => {
           </div>
         )}
         <div className={classes.actions}>
-          <button>{props.isEdit?"Edit event":"Add event"}</button>
+          <button>{props.isEdit ? "Edit event" : "Add event"}</button>
         </div>
         {props.addingTried ? (
           !props.postSuccess ? (

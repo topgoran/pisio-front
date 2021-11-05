@@ -45,25 +45,30 @@ const ConferenceInfo = (props) => {
   const oldGradesIds = [];
 
   useEffect(() => {
-    fetch(
-      RATINGS_URL +
-        "/" +
-        conferenceCtx.userId +
-        "/" +
-        props.conference.conferenceId
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        for (let i = 0; i < data.length; i++) {
-          oldGrades.set(data[i].gradingSubject.gradingSubjectId, data[i].grade);
-          oldGradesIds.push(data[i].gradeId);
-        }
-        console.log("old grades", oldGrades);
-        console.log("old grades ids", oldGradesIds);
-      });
+    if (conferenceCtx.userId != "") {
+      fetch(
+        RATINGS_URL +
+          "/" +
+          conferenceCtx.userId +
+          "/" +
+          props.conference.conferenceId
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          for (let i = 0; i < data.length; i++) {
+            oldGrades.set(
+              data[i].gradingSubject.gradingSubjectId,
+              data[i].grade
+            );
+            oldGradesIds.push(data[i].gradeId);
+          }
+          console.log("old grades", oldGrades);
+          console.log("old grades ids", oldGradesIds);
+        });
+    }
   }, []);
 
   function saveRatings(map) {

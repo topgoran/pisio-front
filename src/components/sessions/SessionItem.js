@@ -12,6 +12,10 @@ const SessionItem = (props) => {
       history.push(
         "/responsibilities/conference/" + props.conferenceId + "/" + props.id
       );
+    }else if(window.location.href.indexOf("my-conferences") > -1){
+      history.push(
+        "/my-conferences/conference/" + props.conferenceId + "/" + props.id
+      );
     } else {
       history.push("/conference/" + props.conferenceId + "/" + props.id);
     }

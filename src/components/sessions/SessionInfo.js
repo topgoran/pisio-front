@@ -64,7 +64,7 @@ const SessionInfo = (props) => {
   return (
     <div>
       <SessionData session={props.session} />
-      <EventsList events={events} />
+      <EventsList events={events} date={props.session.date}/>
       {window.location.href.indexOf("responsibilities") > -1 ? (
         <NewEventForm
           session={props.session}

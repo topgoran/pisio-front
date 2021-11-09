@@ -8,6 +8,7 @@ import classes from "./ConferenceData.module.css";
 const RATINGS_URL = "http://localhost:9000/users/userforconference";
 const USER_GRADES_URL = "http://localhost:9000/usergrades";
 const AVG_RATINGS_URL = "http://localhost:9000/conferences/avg";
+const GRADING_SUBJECTS_URL = "http://localhost:9000/conferences/gradingsubjects"
 
 const ConferenceData = (props) => {
   const conferenceCtx = useContext(ConferenceContext);
@@ -15,6 +16,7 @@ const ConferenceData = (props) => {
   const [messageShow, setMessageShow] = useState(false);
   const [gradeChange, setGradeChange] = useState(false);
   const [avgGrades, setAvgGrades] = useState([]);
+  const [ratings, setRatings] = useState([]);
 
   const map = new Map();
   const oldGrades = new Map();
@@ -50,7 +52,6 @@ const ConferenceData = (props) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setAvgGrades(data);
       });
   }, []);
@@ -67,6 +68,16 @@ const ConferenceData = (props) => {
     setGradeChange(true);
   }
 
+  useEffect(() => {
+    fetch(GRADING_SUBJECTS_URL + "/" + props.conference.conferenceId)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setRatings(data);
+      });
+  }, []);
+
   function onRate(event) {
     event.preventDefault();
 
@@ -75,28 +86,6 @@ const ConferenceData = (props) => {
 
   function saveRatings(event) {
     event.preventDefault();
-    /*for(let i = 0; i < props.conference.gradingSubjects.length; i++){
-      let grade = map.get(props.conference.gradingSubjects[i].gradingSubjectId);
-
-      fetch(
-        USER_GRADES_URL,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            grade: grade,
-            userId: conferenceCtx.userId,
-            gradingSubjectId: props.conference.gradingSubjects[i].gradingSubjectId
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-      }).then(response => {
-         return response.json();
-      }).then(data => {
-        console.log(data);
-      })
-    }
-    setIsRating(false);*/
     if (!gradeChange) {
       for (let i = 0; i < props.conference.gradingSubjects.length; i++) {
         let selectItemId = props.conference.gradingSubjects[i].gradingSubjectId;
@@ -137,7 +126,17 @@ const ConferenceData = (props) => {
             ))}
           </div>
         ) : (
-          ""
+          window.location.href.indexOf("/responsibilities/conference/") > -1 ?
+          <div>
+            <h3>Can be rated by:</h3>
+            {ratings.map((rating) => (
+              <p>
+                - {rating.name}
+              </p>
+            ))}
+            <p>On scale from 1 to 5.</p>
+          </div>
+          :""
         )}
         {(conferenceCtx.userId != "" && currentDate > new Date(props.conference.dateTo)) ? (
           !isRating ? (

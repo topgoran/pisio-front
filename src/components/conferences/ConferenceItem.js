@@ -12,6 +12,8 @@ const ConferenceItem = (props) => {
   function showConference() {
     if (window.location.href.indexOf("responsibilities") > -1) {
       history.push("/responsibilities/conference/" + props.id);
+    } else if(window.location.href.indexOf("my-conferences") > -1){
+      history.push("/my-conferences/conference/" + props.id);
     } else {
       history.push("/conference/" + props.id);
     }

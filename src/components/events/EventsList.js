@@ -29,6 +29,7 @@ const EventsList = (props) => {
             eventType={event.eventType.eventTypeName}
             venue={event.venue !== null? event.venue.name : null}
             numberOfPlaces={event.venue !== null? event.venue.numberOfPlaces : null} 
+            date={props.date}
           />
         ))}
       </ul>

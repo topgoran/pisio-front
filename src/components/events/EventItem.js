@@ -11,6 +11,7 @@ const CHECK_OUT = "http://localhost:9000/eventhasattendees/delete";
 const CHECK_IN = "http://localhost:9000/eventhasattendees";
 const ATTENDEES_COUNT_URL =
   "http://localhost:9000/eventhasattendees/countattendees";
+const RESOURCES_URL = "http://localhost:9000/events/resources";
 
 const EventItem = (props) => {
   const history = useHistory();
@@ -18,6 +19,10 @@ const EventItem = (props) => {
 
   const [isAttendee, setIsAttendee] = useState(null);
   const [attendeesCount, setAttendeesCount] = useState(0);
+
+  const [resources, setResources] = useState([]);
+
+  const currentDate = new Date();
 
   getAttendeesCount();
 
@@ -35,6 +40,16 @@ const EventItem = (props) => {
           setIsAttendee(null);
         });
     }
+  }, []);
+
+  useEffect(() => {
+    fetch(RESOURCES_URL + "/" + props.id)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setResources(data);
+      });
   }, []);
 
   function checkIn(event) {
@@ -106,12 +121,12 @@ const EventItem = (props) => {
           <p>
             {props.accessLink === null
               ? ""
-              : "Access link is " + props.accessLink}
+              : "Access link is: " + props.accessLink}
           </p>
           <p>
             {props.accessPassword === null
               ? ""
-              : "Access password is " + props.accessPassword}
+              : "Access password is: " + props.accessPassword}
           </p>
           <p>Event type: {props.eventType}</p>
           <p>{props.venue === null ? "" : "Venue: " + props.venue}</p>
@@ -123,6 +138,20 @@ const EventItem = (props) => {
                 "/" +
                 props.numberOfPlaces}
           </p>
+          {resources.length > 0 &&
+          window.location.href.indexOf("responsibilities") > -1 ? (
+            <div>
+              <h3>Selected resources for this event</h3>
+              {resources.map((resource) => (
+                <p>
+                  {resource.resourceName} ({resource.resourceType}) :{" "}
+                  {resource.number} (selected amount)
+                </p>
+              ))}
+            </div>
+          ) : (
+            ""
+          )}
           {window.location.href.indexOf("responsibilities") > -1 ? (
             window.location.href.indexOf("edit-event") > -1 ? (
               ""
@@ -133,7 +162,9 @@ const EventItem = (props) => {
             )
           ) : (
             [
-              conferenceCtx.userId == "" ? (
+              conferenceCtx.userId == "" ||
+              window.location.href.indexOf("my-conferences") < 0 ||
+              currentDate >= new Date(props.date) ? (
                 ""
               ) : isAttendee === null ? (
                 <div className={classes.checkIn}>

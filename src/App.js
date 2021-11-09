@@ -46,8 +46,14 @@ function App() {
         <Route path="/responsibilities/conference/:id">
           <Conference />
         </Route>
-        <Route path="/my-conferences">
+        <Route path="/my-conferences" exact>
           <UsersConferences />
+        </Route>
+        <Route path="/my-conferences/conference/:id" exact>
+          <Conference />
+        </Route>
+        <Route path="/my-conferences/conference/:id/:id2">
+          <Session />
         </Route>
         <Route path="/responsibilities/edit-conference/:id">
           <EditConference />

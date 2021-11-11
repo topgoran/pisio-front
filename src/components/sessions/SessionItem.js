@@ -3,6 +3,8 @@ import React from "react";
 import classes from "./SessionItem.module.css";
 import Card from "../ui/Card";
 
+const SESSIONS_URL = "http://localhost:9000/sessions/findconference"
+
 const SessionItem = (props) => {
   const history = useHistory();
 
@@ -12,13 +14,26 @@ const SessionItem = (props) => {
       history.push(
         "/responsibilities/conference/" + props.conferenceId + "/" + props.id
       );
-    }else if(window.location.href.indexOf("my-conferences") > -1){
+    } else if (window.location.href.indexOf("my-conferences") > -1) {
       history.push(
         "/my-conferences/conference/" + props.conferenceId + "/" + props.id
       );
     } else {
       history.push("/conference/" + props.conferenceId + "/" + props.id);
     }
+  }
+
+  function showSession1(event) {
+    event.preventDefault();
+    fetch(SESSIONS_URL + "/" + props.id)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        history.push(
+          "/responsibilities/conference/" + data.conferenceId + "/" + props.id
+        );
+      });
   }
 
   function editSession(event) {
@@ -47,9 +62,17 @@ const SessionItem = (props) => {
                 </div>
               </div>
             </div>
-          ) : window.location.href.indexOf("/responsibilities/edit-session/") > -1 ? "" : (
-            <div className={classes.actions}>
-              <button onClick={editSession}>Edit session</button>
+          ) : window.location.href.indexOf("/responsibilities/edit-session/") >
+            -1 ? (
+            ""
+          ) : (
+            <div>
+              <div className={classes.actions}>
+                <button onClick={editSession}>Edit session</button>
+              </div>
+              <div className={classes.actions}>
+                <button onClick={showSession1}>Show session</button>
+              </div>
             </div>
           )
         ) : (

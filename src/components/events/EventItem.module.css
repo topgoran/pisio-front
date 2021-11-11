@@ -75,3 +75,7 @@
   .checkOut button:active {
     background-color: #fff2f2;
   }
+
+  .checkedInText{
+    color: #2a86ff;
+  }

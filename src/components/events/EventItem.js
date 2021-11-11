@@ -182,6 +182,13 @@ const EventItem = (props) => {
               ),
             ]
           )}
+          {
+            (!conferenceCtx.userId == "" && currentDate >= new Date(props.date) && window.location.href.indexOf("my-conferences") > 0 && isAttendee) ?
+            <div>
+              <h4 className={classes.checkedInText}>You were checked in on this event</h4>
+            </div>
+            :""
+          }
         </div>
       </Card>
     </li>

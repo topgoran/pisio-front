@@ -184,76 +184,81 @@ const NewEventForm = (props) => {
       })
       .then((data) => {
         if (data.length == 0) {
-          setCollisionCheck(false);
+          //setCollisionCheck(false);
+
+          const newEvent = {
+            name: eventName,
+            description: eventDescription,
+            timeFrom:
+              props.session.date.split(" ")[0] +
+              " " +
+              startTime1.split("T")[1].split(".")[0],
+            timeTo:
+              props.session.date.split(" ")[0] +
+              " " +
+              endTime1.split("T")[1].split(".")[0],
+            isOnline: isOnline,
+            sessionId: id2,
+            eventTypeId: eventType,
+            venueId: venue,
+            userLecturerId: lecturer,
+            userModeratorId: moderator,
+            accessLink: accessLink,
+            accessPassword: accessPassword,
+          };
+    
+          if (props.isEdit) {
+            newEvent.sessionId = props.session.sessionId;
+          }
+    
+          /*if (isOnline) {
+          newEvent.venueId = null;
+          newEvent.accessLink = accessLink;
+          newEvent.accessPassword = accessPassword;
         } else {
-          setCollisionCheck(true);
+          newEvent.venueId = venue;
+          newEvent.accessLink = null;
+          newEvent.accessLink = null;
+        }*/
+    
+          console.log("NEW EVENT", newEvent);
+    
+          if (props.isEdit) {
+            fetch(EVENTS_URL + "/" + props.editId, {
+              method: "PUT",
+              body: JSON.stringify(newEvent),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => {
+                if (!response.ok) throw new Error(response.status);
+                else return response.json();
+              })
+              .then((data) => {
+                console.log(data);
+    
+                history.replace("/responsibilities");
+              })
+              .catch((error) => {});
+          } else {
+            props.onAdd(newEvent, newResources);
+          }
+    
+          setNewResources([]);
+
+        } else {
+          //setCollisionCheck(true);
+          alert("Collision with other termin");
+
         }
       });
 
-    if (!collisionCheck) {
-      const newEvent = {
-        name: eventName,
-        description: eventDescription,
-        timeFrom:
-          props.session.date.split(" ")[0] +
-          " " +
-          startTime1.split("T")[1].split(".")[0],
-        timeTo:
-          props.session.date.split(" ")[0] +
-          " " +
-          endTime1.split("T")[1].split(".")[0],
-        isOnline: isOnline,
-        sessionId: id2,
-        eventTypeId: eventType,
-        venueId: venue,
-        userLecturerId: lecturer,
-        userModeratorId: moderator,
-        accessLink: accessLink,
-        accessPassword: accessPassword,
-      };
-
-      if (props.isEdit) {
-        newEvent.sessionId = props.session.sessionId;
-      }
-
-      /*if (isOnline) {
-      newEvent.venueId = null;
-      newEvent.accessLink = accessLink;
-      newEvent.accessPassword = accessPassword;
+    /*if (!collisionCheck) {
+      
     } else {
-      newEvent.venueId = venue;
-      newEvent.accessLink = null;
-      newEvent.accessLink = null;
+
     }*/
-
-      console.log("NEW EVENT", newEvent);
-
-      if (props.isEdit) {
-        fetch(EVENTS_URL + "/" + props.editId, {
-          method: "PUT",
-          body: JSON.stringify(newEvent),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-          .then((response) => {
-            if (!response.ok) throw new Error(response.status);
-            else return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-
-            history.replace("/responsibilities");
-          })
-          .catch((error) => {});
-      } else {
-        props.onAdd(newEvent, newResources);
-      }
-
-      setNewResources([]);
-    } else {
-      alert("Collision with other termin");
-    }
   }
 
   function onVenueChange(venue) {

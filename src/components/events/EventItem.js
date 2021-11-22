@@ -23,6 +23,8 @@ const EventItem = (props) => {
   const [resources, setResources] = useState([]);
 
   const currentDate = new Date();
+  console.log("CURRENT DATE", currentDate);
+  console.log("EVENT DATE", new Date(props.date))
 
   getAttendeesCount();
 
@@ -163,7 +165,6 @@ const EventItem = (props) => {
           ) : (
             [
               conferenceCtx.userId == "" ||
-              window.location.href.indexOf("my-conferences") < 0 ||
               currentDate >= new Date(props.date) ? (
                 ""
               ) : isAttendee === null ? (

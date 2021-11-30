@@ -55,9 +55,15 @@ const UsersResponsibilities = () => {
     <div>
       <h1>Created conferences</h1>
       <ConferencesList conferences={conferences} />
-      <h1>My moderations</h1>
-      <SessionsList sessions={sessions} />
-      <EventsList events={events} />
+      {conferenceCtx.userType == "M" ? (
+        <div>
+          <h1>My moderations</h1>
+          <SessionsList sessions={sessions} />
+          <EventsList events={events} />
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

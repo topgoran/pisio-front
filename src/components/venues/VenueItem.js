@@ -30,7 +30,7 @@ const VenueItem = (props) => {
           <button onClick={deleteVenue}>Delete</button>
         </div>
         <div className={classes.actions}>
-          <button onClick={updateVenue}>Update</button>
+          <button onClick={updateVenue}>Edit</button>
         </div>
 
         {update ? (

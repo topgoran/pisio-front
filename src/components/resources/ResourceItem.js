@@ -30,7 +30,7 @@ const ResourceItem = (props) => {
           <button onClick={deleteResource}>Delete</button>
         </div>
         <div className={classes.actions}>
-          <button onClick={updateResource}>Update</button>
+          <button onClick={updateResource}>Edit</button>
         </div>
         {update ? (
           <NewResourceForm

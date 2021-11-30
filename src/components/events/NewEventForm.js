@@ -249,7 +249,7 @@ const NewEventForm = (props) => {
 
         } else {
           //setCollisionCheck(true);
-          alert("Collision with other termin");
+          alert("Error, there was a collision with other termin");
 
         }
       });
@@ -326,7 +326,7 @@ const NewEventForm = (props) => {
             }}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={60}
+            timeIntervals={15}
             timeCaption="Time"
             dateFormat="HH:mm"
             timeFormat="HH:mm"
@@ -342,7 +342,7 @@ const NewEventForm = (props) => {
             }}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={60}
+            timeIntervals={15}
             timeCaption="Time"
             dateFormat="HH:mm"
             timeFormat="HH:mm"
